@@ -1,12 +1,12 @@
 <!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SVARNA | Interior 3D V5</title>
 <style>:root{--g:#123e30;--c:#f7f4ed}*{box-sizing:border-box}body{margin:0;background:var(--c);color:#193029;font-family:system-ui,Segoe UI,sans-serif}header{background:var(--g);color:white;padding:18px max(20px,calc((100vw - 1200px)/2));display:flex;justify-content:space-between}header strong{letter-spacing:4px;font-size:22px}main{max-width:1200px;margin:28px auto;padding:0 18px}h1{font-size:clamp(24px,3vw,34px);margin:24px 0 8px}p{color:#53655a;line-height:1.55}.panel{background:white;border:1px solid #dce6dc;border-radius:14px;padding:16px}.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:0 0 14px}button,.back{border:0;border-radius:8px;background:var(--g);color:white;font-size:14px;font-weight:650;padding:11px 15px;cursor:pointer;text-decoration:none;display:inline-block}.alt,.back{background:#e4eee6;color:var(--g)}select{padding:10px;border:1px solid #d3dfd4;border-radius:8px}#view{width:100%;height:min(66vw,660px);min-height:390px;background:linear-gradient(#f4f8f7,#e6efea);border-radius:12px;position:relative;overflow:hidden}#view canvas{display:block;width:100%;height:100%}#notice{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:35px;color:#415d4d}#status{font-size:13px;color:#4d6356;margin:10px 0}.warning{background:#fff4e4;border-left:4px solid #c69b59;padding:13px;font-size:13px}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#52665a;margin:12px 0}label{font-size:13px;font-weight:650}@media(max-width:700px){header small{display:none}#view{height:490px}}</style>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script></head><body><header><strong>SVARNA</strong><small>RANCANG • HITUNG • BANGUN</small></header><main><a class="back" href="index.html">← Kembali ke Model Rumah</a><h1>Interior Rumah 3D Interaktif</h1><p>Putar model dengan mouse atau sentuhan, perbesar untuk melihat ruang, pintu, jendela dan perabot. Simpan tampilan yang dipilih sebagai gambar PNG.</p><section class="panel"><div class="toolbar"><label for="floor">Lantai</label><select id="floor"><option value="1">Lantai 1</option><option value="2">Lantai 2</option></select><button id="make">Tampilkan 3D</button><button id="reset" class="alt">Reset Sudut</button><button id="shot" class="alt">Simpan Render PNG</button></div><div id="view"><div id="notice">Memuat mesin visualisasi 3D…</div></div><div id="status"></div><div class="legend"><span>● Hijau: ruang keluarga</span><span>● Biru: kamar tidur</span><span>● Krem: kamar mandi / servis</span></div><div class="warning">Visualisasi konseptual, bukan gambar kerja. Tata ruang menggunakan algoritme sederhana; lokasi bukaan dan sirkulasi belum memenuhi pemeriksaan desain arsitektur. Render PNG adalah tangkapan model 3D, bukan render fotorealistis.</div></section></main>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script></head><body><header><strong>SVARNA</strong><small>RANCANG • HITUNG • BANGUN</small></header><main><a class="back" href="index.html">← Kembali ke Model Rumah</a><h1>Interior Rumah 3D Interaktif</h1><p>Putar model dengan mouse atau sentuhan, perbesar untuk melihat ruang, pintu, jendela dan perabot. Simpan tampilan yang dipilih sebagai gambar PNG.</p><section class="panel"><div class="toolbar"><label for="floor">Lantai</label><select id="floor"><option value="1">Lantai 1</option><option value="2">Lantai 2</option></select><button id="make">Tampilkan 3D</button><button id="reset" class="alt">Reset Sudut</button><button id="shot" class="alt">Simpan Render PNG</button><label><input type="checkbox" id="cutaway"> Tampilan potongan dinding</label></div><div id="view"><div id="notice">Memuat mesin visualisasi 3D…</div></div><div id="status"></div><div class="legend"><span>● Hijau: ruang keluarga</span><span>● Biru: kamar tidur</span><span>● Krem: kamar mandi / servis</span></div><div class="warning">Visualisasi konseptual, bukan gambar kerja. Ukuran tanah merupakan persegi panjang ilustratif; posisi bangunan di tengah tanah, tanpa memperhitungkan GSB, akses jalan, dan peraturan setempat. Tata ruang menggunakan algoritme sederhana; lokasi bukaan dan sirkulasi belum memenuhi pemeriksaan desain arsitektur. Render PNG adalah tangkapan model 3D, bukan render fotorealistis.</div></section></main>
 <script type="module">
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 const $=id=>document.getElementById(id),q=new URLSearchParams(location.search);
 const get=(k,d)=>{let n=Number(q.get(k));return Number.isFinite(n)&&n>0?n:d};
-const c={L:get('L',10),W:get('W',6),floors:Math.min(2,get('lantai',1)),bedrooms:Math.min(4,get('kamar',2)),bp:get('ktP',3),bw:get('ktL',3),lp:get('rtP',3.5),lw:get('rtL',3.5),mp:get('kmP',2),mw:get('kmL',1.5)};
+const c={L:get('L',10),W:get('W',6),floors:Math.min(2,get('lantai',1)),bedrooms:Math.min(4,get('kamar',2)),bp:get('ktP',3),bw:get('ktL',3),lp:get('rtP',3.5),lw:get('rtL',3.5),mp:get('kmP',2),mw:get('kmL',1.5),landL:get('tanahP',15),landW:get('tanahL',10)};
 if(c.floors===1){$('floor').disabled=true;$('floor').value='1'}
 const scene=new THREE.Scene();scene.background=new THREE.Color('#edf3f0');
 const camera=new THREE.PerspectiveCamera(42,1,.1,250);const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.5;
@@ -26,16 +26,33 @@ function living(r){let x=r.x+.25,z=r.z+.3,w=Math.min(1.8,r.w-.5);box(x+w/2,z+.35
 function bath(r){let x=r.x+.22,z=r.z+.22;box(x+.45,z+.52,.85,1.05,.28,.12,M.fabric);box(x+.45,z+.52,.67,.85,.04,.41,M.glass);if(r.w>1.5){box(x+r.w-.75,z+.3,.45,.5,.5,.08,M.fabric);box(x+r.w-.75,z+.3,.22,.3,.1,.58,M.steel)}}
 function stair(r){for(let i=0;i<6;i++)box(r.x+.6,r.z+.22+i*.27,1.05,.25,.11+i*.2,.02,M.wood)}
 function layout(floor){const n=floor===2?Math.max(1,c.bedrooms-1):c.bedrooms,cols=Math.min(2,n),rows=Math.ceil(n/cols);const left=Math.max(c.lp,c.mp),needL=left+cols*c.bp,needW=Math.max(c.lw+c.mw,rows*c.bw);if(needL>c.L+.001||needW>c.W+.001)throw Error(`Ukuran ruang tidak muat: minimal ${needL.toFixed(1)} × ${needW.toFixed(1)} m, bangunan ${c.L} × ${c.W} m.`);let rooms=[{x:0,z:0,w:c.lp,d:c.lw,type:'living',name:'Ruang keluarga'},{x:0,z:c.lw,w:c.mp,d:c.mw,type:'bath',name:'Kamar mandi'}];if(floor===1&&c.floors===2){let w=left-c.mp;if(w>=.8)rooms.push({x:c.mp,z:c.lw,w,d:Math.min(2.5,c.mw),type:'stairs',name:'Tangga'})}for(let i=0;i<n;i++)rooms.push({x:left+(i%cols)*c.bp,z:Math.floor(i/cols)*c.bw,w:c.bp,d:c.bw,type:'bed',name:'Kamar '+(i+1)});return rooms}
-function resetCamera(){let span=Math.max(c.L,c.W);camera.position.set(c.L*.85+4,Math.max(9,span*1.25),c.W*1.35+5);controls.target.set(c.L/2,0,c.W/2);controls.update()}
-function build(){const floor=Number($('floor').value);let rooms;try{rooms=layout(floor)}catch(e){$('status').textContent=e.message;return}group.clear();plane(c.L/2,c.W/2,c.L,c.W,-.13,M.floor);plane(c.L/2,c.W/2,c.L+1.3,c.W+1.3,-.24,M.green);
+function resetCamera(){let span=Math.max(c.landL,c.landW,c.L,c.W);camera.position.set(c.L*.85+4,Math.max(9,span*1.25),c.W*1.35+5);controls.target.set(c.L/2,0,c.W/2);controls.update()}
+function build(){const floor=Number($('floor').value);let rooms;try{rooms=layout(floor)}catch(e){$('status').textContent=e.message;return}group.clear();plane(c.L/2,c.W/2,c.L,c.W,-.13,M.floor);const landL=Math.max(c.landL,c.L),landW=Math.max(c.landW,c.W);
+ // Bangunan berpusat di tanah; permukaan tanah dapat meluas di luar tapak bangunan.
+ plane(c.L/2,c.W/2,landL,landW,-.24,M.green);
+ const halfX=(landL-c.L)/2,halfZ=(landW-c.W)/2;
+ const border=mat('#526d59');
+ // Batas bidang tanah: empat sisi, bukan pagar konstruksi.
+ box(c.L/2,-halfZ,landL,.045,.045,-.18,border);
+ box(c.L/2,c.W+halfZ,landL,.045,.045,-.18,border);
+ box(-halfX,c.W/2,.045,landW,.045,-.18,border);
+ box(c.L+halfX,c.W/2,.045,landW,.045,-.18,border);
  for(let r of rooms){plane(r.x+r.w/2,r.z+r.d/2,r.w-.07,r.d-.07,-.05,r.type==='bed'?M.bedroom:r.type==='living'?M.living:M.bath);if(r.type==='bed')bed(r);else if(r.type==='living')living(r);else if(r.type==='bath')bath(r);else stair(r);wall(r.x,r.z,r.x+r.w,r.z,1.5);wall(r.x,r.z,r.x,r.z+r.d,1.45);wallWithDoor(r.x,r.z+r.d,r.x+r.w,r.z+r.d,.65)}
- // Two high perimeter walls with genuine window panes; near sides intentionally cut away.
- windowWall(0,0,c.L,0);windowWall(0,0,0,c.W);
- // Main entrance at front facade, with a framed door and a step.
- wallWithDoor(0,c.W,c.L,c.W,.22);box(c.L*.22,c.W+.35,1.35,.65,.12,-.12,M.wood);
- $('status').textContent=`${c.L} × ${c.W} m • Lantai ${floor} dari ${c.floors} • ${rooms.filter(r=>r.type==='bed').length} kamar tidur • ${rooms.length} ruang terdefinisi. Model interior bersifat konseptual.`;
+ // Keempat sisi dinding luar tertutup; tampilan potongan opsional untuk inspeksi interior.
+ const cutaway=$('cutaway').checked;
+ windowWall(0,0,c.L,0);
+ windowWall(0,0,0,c.W);
+ windowWall(c.L,0,c.L,c.W);
+ if(cutaway){
+   // Pada mode potongan, dinding depan rendah supaya interior terlihat.
+   wall(0,c.W,c.L,c.W,.55);
+ }else{
+   wallWithDoor(0,c.W,c.L,c.W,.22);
+ }
+ box(c.L*.22,c.W+.35,1.35,.65,.12,-.12,M.wood);
+ $('status').textContent=`${c.L} × ${c.W} m • Lantai ${floor} dari ${c.floors} • ${rooms.filter(r=>r.type==='bed').length} kamar tidur • ${rooms.length} ruang terdefinisi • Tanah ${landL} × ${landW} m (${(landL*landW-c.L*c.W).toFixed(1)} m² sisa halaman). Model interior bersifat konseptual.`;
  resetCamera()}
-$('make').onclick=build;$('floor').onchange=build;$('reset').onclick=resetCamera;
+$('cutaway').onchange=build;$('make').onclick=build;$('floor').onchange=build;$('reset').onclick=resetCamera;
 $('shot').onclick=()=>{renderer.render(scene,camera);const a=document.createElement('a');a.href=renderer.domElement.toDataURL('image/png');a.download=`SVARNA-Interior-3D-Lantai-${$('floor').value}.png`;a.click()};
 function resize(){let el=$('view'),w=el.clientWidth,h=el.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
 new ResizeObserver(resize).observe($('view'));resize();build();function animate(){requestAnimationFrame(animate);controls.update();renderer.render(scene,camera)}animate();
